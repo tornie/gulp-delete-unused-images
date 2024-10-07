@@ -15,7 +15,7 @@ function deleteUnusedImages(options) {
 
   options = options || {};
 
-  _.defaults(options, {delete: true, log: false});
+  _.defaults(options, { delete: true, log: false, delimiter: '\\' });
 
   var imageNames = [];
   var usedImageNames = [];
@@ -66,7 +66,7 @@ function deleteUnusedImages(options) {
     _.mixin({
       findUsedImages: function (imageNames, usedImageNames) {
         return _.filter(imageNames, function (path) {
-          return _.includes(usedImageNames, _(path).split('/').last());
+          return _.includes(usedImageNames, _(path).split(options.delimiter).last());
         });
       }
     });
@@ -77,7 +77,7 @@ function deleteUnusedImages(options) {
     if (unusedImages.length) {
       if (options.delete) {
         del(unusedImages).then(paths => {
-            console.log('Deleted images:\n', paths.join('\n'));
+          console.log('Deleted images:\n', paths.join('\n'));
         });
       }
       if (options.log) {
